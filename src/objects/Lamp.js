@@ -62,7 +62,7 @@ export default class Lamp{
         let cornerX = this.target.x;
         let cornerY;
         while(!positionFound){
-            cornerX += (raysBuffer + 1) / oppositeSlope;
+            cornerX += Math.abs(oppositeSlope) < 1 ? raysBuffer + 1 : (raysBuffer + 1) / oppositeSlope;
             cornerY = this.oppositeLineFunction(cornerX, oppositeSlope);
             farEdgePositions.push(new Vector2(cornerX, cornerY));
 
@@ -75,7 +75,7 @@ export default class Lamp{
         
         // Draw the other corner
         cornerY = this.target.y;
-        for (cornerX = this.target.x; this.distanceBetween(this.target.x, cornerX, this.target.y, cornerY) < oppositeLengthTarget; cornerX -= (raysBuffer + 1) / oppositeSlope){
+        for (cornerX = this.target.x; this.distanceBetween(this.target.x, cornerX, this.target.y, cornerY) < oppositeLengthTarget; cornerX -= Math.abs(oppositeSlope) < 1 ? (raysBuffer + 1) : (raysBuffer + 1) / oppositeSlope){
             cornerY = this.oppositeLineFunction(cornerX, oppositeSlope);
             farEdgePositions.push(new Vector2(cornerX, cornerY));
         }
