@@ -102,6 +102,8 @@ export default class Lamp{
 
     drawLineTowards(startingPosition, finalPosition, drawSize = 10, stepSize = 10){
         const slope = (finalPosition.y - startingPosition.y) / (finalPosition.x - startingPosition.x);
+        if (Math.abs(slope) > 1000)
+        console.log();
 
         let drawPosition = new Vector2(startingPosition.x, startingPosition.y);
 
@@ -116,17 +118,18 @@ export default class Lamp{
                 break
                 
 
-            if (xPositionIncreasing){
-                drawPosition.x += stepSize;
-                drawPosition.y += stepSize * slope;
-            }
-            else
-            {
-                drawPosition.x -= stepSize;
-                drawPosition.y -= stepSize * slope;
-            }
-            
-            
+            if (Math.abs(slope) != Infinity)
+                drawPosition.x += stepSize * (xPositionIncreasing ? 1 : -1);
+            drawPosition.y += stepSize * slope * (xPositionIncreasing ? 1 : -1);
+            // if (xPositionIncreasing){
+            //     drawPosition.x += stepSize;
+            //     drawPosition.y += stepSize * slope;
+            // }
+            // else
+            // {
+            //     drawPosition.x -= stepSize;
+            //     drawPosition.y -= stepSize * slope;
+            // }
 
             
         }
