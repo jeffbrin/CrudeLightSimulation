@@ -56,23 +56,26 @@ export default class Lamp{
         let oppositeLengthTarget = Math.sin(this.lightAngle / 180 * Math.PI / 2) * adjacentLength
 
         // Find the corner x value which makes the opposite side the correct length
+        const raysBuffer = 1;
         const farEdgePositions = []
         let positionFound = false;
         let cornerX = this.target.x;
         let cornerY;
         while(!positionFound){
-            cornerX++;
+            cornerX += (raysBuffer + 1) / oppositeSlope;
             cornerY = this.oppositeLineFunction(cornerX, oppositeSlope);
             farEdgePositions.push(new Vector2(cornerX, cornerY));
 
             positionFound = this.distanceBetween(this.target.x, cornerX, this.target.y, cornerY) >= oppositeLengthTarget;
         }
 
+
         // Save the first corner
         const firstCorner = new Vector2(cornerX, cornerY);
         
         // Draw the other corner
-        for (cornerX = this.target.x; cornerX > this.target.x - oppositeLengthTarget; cornerX--){
+        cornerY = this.target.y;
+        for (cornerX = this.target.x; this.distanceBetween(this.target.x, cornerX, this.target.y, cornerY) < oppositeLengthTarget; cornerX -= (raysBuffer + 1) / oppositeSlope){
             cornerY = this.oppositeLineFunction(cornerX, oppositeSlope);
             farEdgePositions.push(new Vector2(cornerX, cornerY));
         }
@@ -95,14 +98,8 @@ export default class Lamp{
         this.drawLineTowards(this.center, firstCorner, 10, 2);
         this.drawLineTowards(this.center, secondCorner, 10, 2);
 
-        // Draw the edge
-        // context.fillStyle = "red";
-        // this.drawAllPositions(farEdgePositions, 10, 2);
-        // context.fillStyle = "black";
-        
     }
 
-    // TODO: Add "Collision"
     drawLineTowards(startingPosition, finalPosition, drawSize = 10, stepSize = 10){
         const slope = (finalPosition.y - startingPosition.y) / (finalPosition.x - startingPosition.x);
 
